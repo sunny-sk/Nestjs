@@ -9,6 +9,8 @@ import {
   Patch,
   ValidationPipe,
   Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -19,26 +21,25 @@ import { CParseIntPipe } from './pipes/parseInt.pipe';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { TaskStatus } from './task.model';
 import { GetTaskFilterDto } from './dto/get-tasks-filter.dto';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('tasks')
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private readonly taskService: TasksService) {}
   @Get()
   getTasks(
-    @Query(ValidationPipe) filterDto: GetTaskFilterDto
+    @Query(ValidationPipe) filterDto: GetTaskFilterDto,
+    @Req() req
   ): Promise<Task[]> {
-    return this.taskService.getTasks(filterDto);
+    return this.taskService.getTasks(filterDto, req.user);
   }
-  // @Get()
-  // getTasks(@Query(ValidationPipe) filterDto: GetTaskFilterDto): Task[] {
-  //   if (Object.keys(filterDto).length) {
-  //     return this.taskService.getTasksWithFilters(filterDto);
-  //   }
-  //   return this.taskService.getAllTasks();
-  // }
 
   @Get(':id')
-  getTaskById(@Param('id', CParseIntPipe) id: number): Promise<Task> {
-    return this.taskService.getTaskById(id);
+  getTaskById(
+    @Param('id', CParseIntPipe) id: number,
+    @Req() req
+  ): Promise<Task> {
+    return this.taskService.getTaskById(id, req.user);
   }
 
   // method1
@@ -59,13 +60,13 @@ export class TasksController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.taskService.createTask(createTaskDto);
+  createTask(@Body() createTaskDto: CreateTaskDto, @Req() req): Promise<Task> {
+    return this.taskService.createTask(createTaskDto, req.user);
   }
 
   @Delete(':id')
-  deleteTask(@Param('id', CParseIntPipe) id: string): Promise<any> {
-    return this.taskService.deleteTask(id);
+  deleteTask(@Param('id', CParseIntPipe) id: number, @Req() req): Promise<any> {
+    return this.taskService.deleteTask(id, req.user);
   }
 
   @Patch(':id/status')
@@ -73,8 +74,9 @@ export class TasksController {
     @Param('id', CParseIntPipe) id: number,
     // custom pipe for validation
     // new TaskStatusValidation(123,34) id params
-    @Body('status', TaskStatusValidationPipe) status: TaskStatus
+    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+    @Req() req
   ): Promise<Task> {
-    return this.taskService.updateTaskStatus(id, status);
+    return this.taskService.updateTaskStatus(id, status, req.user);
   }
 }
