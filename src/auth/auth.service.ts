@@ -34,14 +34,18 @@ export class AuthService {
           'role',
           'updatedAt',
         ]),
-        access_token: this.login(user._id).access_token,
+        access_token: this.genAuthtoken(user._id),
       },
     };
   }
 
   async validateUser(data: { email: string; password: string }): Promise<any> {
     const user = await this.userService.findOne({ email: data.email });
-    if (user && user.password === data.password) {
+    const hashedPassword = await this.userService.hashPassword(
+      data.password,
+      user.salt
+    );
+    if (user && user.password === hashedPassword) {
       return user;
     } else {
       throw new Error(false, 'invalid credentials', HttpStatus.BAD_REQUEST);
@@ -68,7 +72,7 @@ export class AuthService {
             'role',
             'updatedAt',
           ]),
-          access_token: this.login(id).access_token,
+          access_token: this.genAuthtoken(id),
         },
       };
     } else {
@@ -76,9 +80,27 @@ export class AuthService {
     }
   }
 
-  login(id: string) {
+  // @params  jswtPayload
+  private genAuthtoken(id: string): string {
+    return this.jwtService.sign({ id });
+  }
+
+  login(user) {
     return {
-      access_token: this.jwtService.sign({ id }),
+      success: true,
+      code: 200,
+      user: {
+        ..._.pick(user, [
+          '_id',
+          'name',
+          'email',
+          'createdAt',
+          'emailVerified',
+          'role',
+          'updatedAt',
+        ]),
+        access_token: this.jwtService.sign({ id: user._id }),
+      },
     };
   }
 }

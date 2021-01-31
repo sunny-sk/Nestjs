@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Post,
   Req,
   UseFilters,
@@ -13,9 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
   ApiConsumes,
-  ApiCreatedResponse,
   ApiOkResponse,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/utils/Error';
@@ -44,12 +44,14 @@ export class AuthController {
   }
 
   @Get('me')
+  @HttpCode(200)
   @UseGuards(AuthGuard())
   getMe(@Req() req) {
     return this.authService.getMe(req.user._id);
   }
 
   @Post('signin')
+  @HttpCode(200)
   @UsePipes(new ValidationPipe())
   @ApiConsumes('application/json')
   @ApiOkResponse({
@@ -62,6 +64,6 @@ export class AuthController {
   })
   async signin(@Body() body: LoginDto): Promise<any> {
     const user = await this.authService.validateUser(body);
-    return this.authService.login(user._id);
+    return this.authService.login(user);
   }
 }

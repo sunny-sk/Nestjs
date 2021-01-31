@@ -23,7 +23,6 @@ export const userSchema = new Schema(
       type: String,
       required: [true, 'Please add a password'],
       minlength: [5, 'password minimum lenth should be 5'],
-      maxlength: [10, 'password maximum lenth should be 10'],
     },
     salt: {
       type: String,
