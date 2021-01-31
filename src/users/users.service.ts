@@ -39,6 +39,14 @@ export class UsersService {
       };
     } catch (error) {}
   }
+  async addUSer(newUser: CreateUserDto) {
+    const user = new this.userModel({
+      ...newUser,
+    });
+    try {
+      return await user.save();
+    } catch (error) {}
+  }
   async signinUser(loginData: LoginDto) {
     const user = await this.userModel.findOne({ ...loginData });
     if (!user) {

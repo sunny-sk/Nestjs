@@ -12,11 +12,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/utils/Error';
 import { Task } from './task.model';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
+@ApiTags('tasks')
 @UseFilters(HttpExceptionFilter)
 @UseGuards(AuthGuard())
 export class TasksController {
