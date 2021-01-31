@@ -9,13 +9,16 @@ import {
   Post,
   Req,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { HttpExceptionFilter } from 'src/utils/Error';
 import { Task } from './task.model';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
 @UseFilters(HttpExceptionFilter)
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 

@@ -15,16 +15,4 @@ import { UsersService } from './users.service';
 @UseFilters(HttpExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post('signup')
-  @UsePipes(new ValidationPipe())
-  signupUser(@Body() newUser: CreateUserDto) {
-    return this.usersService.signupUser(newUser);
-  }
-
-  @Post('signin')
-  @UsePipes(new ValidationPipe())
-  signinUser(@Body() loginData: LoginDto) {
-    return this.usersService.signinUser(loginData);
-  }
 }

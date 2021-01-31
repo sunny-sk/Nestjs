@@ -60,7 +60,10 @@ export class UsersService {
     };
   }
 
-  async findOne(email: string) {
-    return await this.userModel.findOne({ email });
+  async findOne(data: any) {
+    return await this.userModel.findOne(data);
+  }
+  async findById(id: string) {
+    return await this.userModel.findById(id);
   }
 }
