@@ -22,7 +22,7 @@ async function bootstrap() {
 
   app.use(helmet());
   app.enableCors();
-  const PORT = 3000;
+  const PORT = 3001;
   await app.listen(PORT);
   logger.log('Application listening on port ' + PORT);
 }
