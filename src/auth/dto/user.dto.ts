@@ -42,3 +42,9 @@ export class LoginDto {
   @ApiProperty()
   email: string;
 }
+export class googleAuthDto {
+  @IsDefined()
+  @IsString()
+  @ApiProperty()
+  tokenId: string;
+}

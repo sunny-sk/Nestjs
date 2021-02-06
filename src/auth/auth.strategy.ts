@@ -5,7 +5,7 @@ import { Error } from 'src/utils/Error';
 import { AuthService } from './auth.service';
 import { SECRET } from '../constants/constant';
 @Injectable()
-export class AuthStrategy extends PassportStrategy(Strategy) {
+export class AuthStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

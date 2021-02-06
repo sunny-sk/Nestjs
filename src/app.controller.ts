@@ -6,7 +6,7 @@ import { HttpExceptionFilter } from 'src/utils/Error';
 export class AppController {
   @Get()
   @Render('index')
-  root() {
+  homePage() {
     return { message: 'Hello world!' };
   }
 }
