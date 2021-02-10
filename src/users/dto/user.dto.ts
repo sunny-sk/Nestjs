@@ -1,11 +1,16 @@
 import {
+  ArrayMinSize,
+  ArrayUnique,
+  IsArray,
   IsBoolean,
   IsDefined,
   IsEmail,
+  IsEnum,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { ROLE } from 'src/constants/constant';
 
 export class CreateUserDto {
   @IsDefined()
@@ -67,4 +72,13 @@ export class PasswordUpdateDto {
   @MaxLength(10)
   @MinLength(5)
   newPassword: string;
+}
+
+export class RoleDto {
+  @IsDefined()
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayUnique()
+  @IsEnum(ROLE, { each: true })
+  roles: ROLE[];
 }
