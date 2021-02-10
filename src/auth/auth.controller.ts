@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
-  HttpStatus,
+  Param,
   Post,
   Req,
   UseFilters,
@@ -20,13 +20,40 @@ import {
 } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/utils/Error';
 import { AuthService } from './auth.service';
-import { LoginDto, CreateUserDto } from './dto/user.dto';
+import { LoginDto, CreateUserDto, googleAuthDto } from './dto/user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
 @UseFilters(HttpExceptionFilter)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  // @Get('google')
+  // @UseGuards(AuthGuard('google'))
+  // async googleAuth(@Req() req) {
+  //   // return 'Hellow orld';
+  // }
+
+  // @Get('google/callback')
+  // @UseGuards(AuthGuard('google'))
+  // async googleAuthRedirect(@Req() req) {
+  //   return this.authService.googleLogin(req);
+  // }
+
+  @Post('google')
+  @UsePipes(new ValidationPipe())
+  @ApiConsumes('application/json')
+  @ApiOkResponse({
+    status: 201,
+    description: 'user registered successfully',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'user loggedIn successfully',
+  })
+  googleAuth(@Body() newUser: googleAuthDto) {
+    return this.authService.googleAuth(newUser);
+  }
 
   @Post('signup')
   @UsePipes(new ValidationPipe())
@@ -63,7 +90,6 @@ export class AuthController {
     description: 'invalid credentials',
   })
   async signin(@Body() body: LoginDto): Promise<any> {
-    const user = await this.authService.validateUser(body);
-    return this.authService.login(user);
+    return await this.authService.signinUser(body);
   }
 }

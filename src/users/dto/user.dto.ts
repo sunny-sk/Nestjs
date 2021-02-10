@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDefined,
   IsEmail,
   IsString,
@@ -24,6 +25,20 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 }
+export interface UserDto {
+  name: string;
+  _id: string;
+  password: string;
+  email: string;
+  status: boolean;
+}
+export class UpdateUserDto {
+  @IsDefined()
+  @IsString()
+  @MaxLength(32)
+  @MinLength(5)
+  name: string;
+}
 export class LoginDto {
   @IsDefined()
   @IsString()
@@ -35,4 +50,21 @@ export class LoginDto {
   @IsString()
   @IsEmail()
   email: string;
+}
+export class StatusDto {
+  @IsDefined()
+  @IsBoolean()
+  status: boolean;
+}
+export class PasswordUpdateDto {
+  @IsDefined()
+  @IsString()
+  @MaxLength(10)
+  @MinLength(5)
+  oldPassword: string;
+  @IsDefined()
+  @IsString()
+  @MaxLength(10)
+  @MinLength(5)
+  newPassword: string;
 }
