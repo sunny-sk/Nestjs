@@ -6,7 +6,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
+import { AdminController, UsersController } from './users.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { userSchema } from './user.model';
 import { AuthModule } from 'src/auth/auth.module';
@@ -16,7 +16,7 @@ import { LoggerMiddleware } from 'src/middleware/logger.middleware';
     MongooseModule.forFeature([{ name: 'User', schema: userSchema }]),
     forwardRef(() => AuthModule),
   ],
-  controllers: [UsersController],
+  controllers: [UsersController, AdminController],
   providers: [UsersService],
   exports: [UsersService],
 })

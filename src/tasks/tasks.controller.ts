@@ -20,7 +20,7 @@ import { TasksService } from './tasks.service';
 @Controller('tasks')
 @ApiTags('tasks')
 @UseFilters(HttpExceptionFilter)
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 

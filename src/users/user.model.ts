@@ -1,4 +1,5 @@
 import { Document, Schema } from 'mongoose';
+import { ROLE } from 'src/constants/constant';
 export const userSchema = new Schema(
   {
     name: {
@@ -27,10 +28,10 @@ export const userSchema = new Schema(
     salt: {
       type: String,
     },
-    role: {
-      type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
+    roles: {
+      type: [String],
+      enum: ['admin', 'user'],
+      default: ['user'],
     },
     resetPasswordToken: {
       type: String,
@@ -39,6 +40,10 @@ export const userSchema = new Schema(
     emailVerifyToken: {
       type: String,
       default: null,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
@@ -50,7 +55,7 @@ export interface User extends Document {
   email: string;
   password: string;
   emailVerified: true;
-  role: string;
+  roles: string[];
   salt: string;
   resetPasswordToken: string;
   emailVerifyToken: string;
