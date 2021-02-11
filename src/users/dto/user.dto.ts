@@ -25,6 +25,9 @@ export class CreateUserDto {
   @MinLength(5)
   password: string;
 
+  @IsArray()
+  skills: string[];
+
   @IsDefined()
   @IsString()
   @IsEmail()
@@ -43,6 +46,9 @@ export class UpdateUserDto {
   @MaxLength(32)
   @MinLength(5)
   name: string;
+
+  @IsArray()
+  skills: string[];
 }
 export class LoginDto {
   @IsDefined()
