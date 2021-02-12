@@ -12,27 +12,6 @@ import {
 } from 'class-validator';
 import { ROLE } from 'src/constants/constant';
 
-export class CreateUserDto {
-  @IsDefined()
-  @IsString()
-  @MaxLength(32)
-  @MinLength(5)
-  name: string;
-
-  @IsDefined()
-  @IsString()
-  @MaxLength(10)
-  @MinLength(5)
-  password: string;
-
-  @IsArray()
-  skills: string[];
-
-  @IsDefined()
-  @IsString()
-  @IsEmail()
-  email: string;
-}
 export interface UserDto {
   name: string;
   _id: string;

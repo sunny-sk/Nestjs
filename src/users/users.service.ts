@@ -3,12 +3,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Error } from 'src/utils/Error';
 import {
-  CreateUserDto,
   PasswordUpdateDto,
   RoleDto,
   StatusDto,
   UpdateUserDto,
 } from './dto/user.dto';
+import { CreateUserDto } from '../common/dto/user.dto';
 import { User } from './user.model';
 import * as _ from 'lodash';
 import * as bcrypt from 'bcrypt';
