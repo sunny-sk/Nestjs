@@ -6,10 +6,13 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthStrategy } from './auth.strategy';
 import { SECRET } from '../constants/constant';
+import { GoogleStrategy } from './google.strategy';
+import { EmailService } from './email.service';
 
 @Module({
   imports: [
-    forwardRef(() => UsersModule),
+    UsersModule,
+    // forwardRef(() => UsersModule),
     JwtModule.register({
       secret: SECRET,
       signOptions: { expiresIn: 3600 },
@@ -17,7 +20,7 @@ import { SECRET } from '../constants/constant';
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthStrategy],
-  exports: [AuthService, PassportModule, AuthStrategy],
+  providers: [AuthService, EmailService, AuthStrategy, GoogleStrategy],
+  exports: [AuthService, PassportModule, AuthStrategy, GoogleStrategy],
 })
 export class AuthModule {}

@@ -20,7 +20,14 @@ import {
 } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/utils/Error';
 import { AuthService } from './auth.service';
-import { LoginDto, CreateUserDto, googleAuthDto } from './dto/user.dto';
+import {
+  signInDto,
+  PasswordUpdateDto,
+  googleAuthDto,
+  EmailDto,
+} from './dto/auth.dto';
+
+import { CreateUserDto } from '../common/dto/user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -89,7 +96,71 @@ export class AuthController {
     status: 400,
     description: 'invalid credentials',
   })
-  async signin(@Body() body: LoginDto): Promise<any> {
-    return await this.authService.signinUser(body);
+  signin(@Body() body: signInDto): Promise<any> {
+    return this.authService.signinUser(body);
+  }
+  @Post('sendResetPasswordLink')
+  @HttpCode(200)
+  @UsePipes(new ValidationPipe())
+  @ApiConsumes('application/json')
+  @ApiOkResponse({
+    status: 200,
+    description: 'reset password link send successfully',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'invalid credentials',
+  })
+  sendResetPasswordLink(@Body() { email }: EmailDto): Promise<any> {
+    return this.authService.sendResetPasswordLink(email);
+  }
+
+  @Post('resetPassword/:token')
+  @HttpCode(200)
+  @UsePipes(new ValidationPipe())
+  @ApiConsumes('application/json')
+  @ApiOkResponse({
+    status: 200,
+    description: 'password changed successfully',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  resetPassword(
+    @Param('token') token: string,
+    @Body() { newPassword }: PasswordUpdateDto
+  ): Promise<any> {
+    return this.authService.resetPassword(token, newPassword);
+  }
+
+  @Post('sendEmailVerificationLink')
+  @HttpCode(200)
+  @ApiConsumes('application/json')
+  @ApiOkResponse({
+    status: 200,
+    description: 'link send successfully',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  async sendEmailVerificationLink(@Body() { email }: EmailDto): Promise<any> {
+    return this.authService.sendEmailVerificationLink(email);
+  }
+  @Post('verifyEmail/:token')
+  @HttpCode(200)
+  @UsePipes(new ValidationPipe())
+  @ApiConsumes('application/json')
+  @ApiOkResponse({
+    status: 200,
+    description: 'link send successfully',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Bad request',
+  })
+  verifyEmail(@Param('token') token: string): Promise<any> {
+    return this.authService.verifyEmail(token);
   }
 }
