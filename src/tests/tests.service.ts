@@ -25,6 +25,38 @@ export class TestsService {
       tests: x,
     };
   }
+  async submitFeedback(id: string, feedback: string) {
+    const test = await this.testModel.findById(id);
+    if (!test) {
+      throw new Error(
+        false,
+        'test not found with this id',
+        HttpStatus.NOT_FOUND
+      );
+    } else if (!test.isValid) {
+      throw new Error(false, 'Test Link expired', HttpStatus.BAD_REQUEST);
+    } else if (!test.startedAt) {
+      throw new Error(
+        false,
+        'test not started yet, please start test',
+        HttpStatus.BAD_REQUEST
+      );
+    } else if (test.feedback) {
+      throw new Error(
+        false,
+        "there is already a feedback, can't submit again",
+        HttpStatus.NOT_FOUND
+      );
+    }
+    test.feedback = feedback;
+    test.isValid = false;
+    await test.save();
+    return {
+      success: true,
+      code: 200,
+      message: 'feedback submitted successfully',
+    };
+  }
 
   async getOne(id: string) {
     const test = await this.testModel.findById(id).populate({

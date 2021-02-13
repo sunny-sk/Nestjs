@@ -14,6 +14,7 @@ export const TestSchema = new Schema(
     candidateEmail: {
       type: String,
       required: true,
+      unique: true,
     },
     totalTime: {
       type: Number,
@@ -71,6 +72,10 @@ export const TestSchema = new Schema(
       type: Date,
       default: null,
     },
+    feedback: {
+      type: String,
+      default: null,
+    },
     finishedAt: {
       type: Date,
       default: null,
@@ -100,4 +105,5 @@ export interface Test extends Document {
   isValid: boolean;
   passingStatus: PASSING_STATUS;
   passingPer: number;
+  feedback: string;
 }

@@ -36,6 +36,13 @@ export class TestController {
   async startTest(@Param('id', ParseObjectIdPipe) id: string) {
     return this.testService.startTest(id);
   }
+  @Post(':id/feedback')
+  async submitFeedback(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body('feedback') feedback: string
+  ) {
+    return this.testService.submitFeedback(id, feedback);
+  }
   @Post(':testId/saveStatus')
   async saveStatus(
     @Param('testId', ParseObjectIdPipe) testId: string,
