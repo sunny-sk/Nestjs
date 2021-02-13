@@ -1,17 +1,103 @@
 import { Document, Schema } from 'mongoose';
-export const TestSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
+import * as mongoose from 'mongoose';
+import { PASSING_PERCENTAGE, PASSING_STATUS } from '../constants/constant';
+export const TestSchema = new Schema(
+  {
+    candidateName: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      default: null,
+    },
+    candidateEmail: {
+      type: String,
+      required: true,
+    },
+    totalTime: {
+      type: Number,
+      default: 30,
+    },
+    totalQuetions: {
+      type: Number,
+      default: 20,
+    },
+    oneTimeAccess: {
+      type: Boolean,
+      default: true,
+    },
+    passingPer: {
+      type: Number,
+      default: PASSING_PERCENTAGE,
+    },
+    isTimeout: {
+      type: Boolean,
+      default: false,
+    },
+    isValid: {
+      type: Boolean,
+      default: true,
+    },
+    isFinished: {
+      type: Boolean,
+      default: false,
+    },
+    passingStatus: {
+      type: String,
+      default: null,
+      enum: PASSING_STATUS,
+    },
+    questions: {
+      type: [
+        new Schema(
+          {
+            questionId: {
+              type: mongoose.Types.ObjectId,
+              required: true,
+              ref: 'Question',
+            },
+            submittedAns: {
+              type: String,
+              default: null,
+            },
+          },
+          { _id: false }
+        ),
+      ],
+      required: true,
+    },
+    startedAt: {
+      type: Date,
+      default: null,
+    },
+    finishedAt: {
+      type: Date,
+      default: null,
+    },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 export interface Test extends Document {
   id: string;
-  title: string;
   description: string;
+  candidateName: string;
+  candidateEmail: string;
+  totalTime: number;
+  totalQuetions: number;
+  oneTimeAccess: boolean;
+  isTimeout: boolean;
+  isFinished: boolean;
+  questions: any[];
+  createdBy: any;
+  startedAt: Date;
+  finishedAt: Date;
+  isValid: boolean;
+  passingStatus: PASSING_STATUS;
+  passingPer: number;
 }
