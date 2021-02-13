@@ -6,6 +6,7 @@ export const categorySchema = new Schema(
       required: [true, 'Please add a category name'],
       maxlength: [32, 'max character 32'],
       trim: true,
+      unique: true,
     },
   },
   { timestamps: true }

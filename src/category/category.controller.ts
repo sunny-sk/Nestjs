@@ -20,21 +20,21 @@ import { CreateCategoryDto } from './dto/category.dto';
 @UseFilters(HttpExceptionFilter)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
-  @Get('/category/getall')
+  @Get('/category')
   getAll() {
     return this.categoryService.getAll();
   }
-  @Post('admin/category')
-  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin]))
+  @Post('/admin/category')
+  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.INTERVIEWER]))
   create(@Body() category: CreateCategoryDto) {
     return this.categoryService.create(category);
   }
-  @Delete('admin/category/:id')
+  @Delete('/admin/category/:id')
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin]))
   delete(@Param('id', ParseObjectIdPipe) id: string) {
     return this.categoryService.delete(id);
   }
-  @Put('admin/category/:id')
+  @Put('/admin/category/:id')
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin]))
   update(
     @Param('id', ParseObjectIdPipe) id: string,

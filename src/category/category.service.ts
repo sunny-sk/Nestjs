@@ -10,22 +10,42 @@ export class CategoryService {
   constructor(
     @InjectModel('Category') private readonly categoryModel: Model<Category>
   ) {}
-  getAll() {
-    return this.categoryModel.find({});
-  }
-  async create(category: CreateCategoryDto) {
-    const newCategory = new this.categoryModel(category);
-    await newCategory.save();
+  async getAll() {
+    const categories = await this.categoryModel.find({});
     return {
       success: true,
       code: 200,
-      category: {
-        ...newCategory,
-      },
+      count: categories.length,
+      categories,
     };
   }
+
+  findByID(id: string) {
+    return this.categoryModel.findById(id);
+  }
+
+  async create(category: CreateCategoryDto) {
+    try {
+      const newCategory = new this.categoryModel({ ...category });
+      await newCategory.save();
+      return {
+        success: true,
+        code: 200,
+        category: newCategory,
+      };
+    } catch (error) {
+      console.log(error);
+      if (error.code == 11000) {
+        throw new Error(
+          false,
+          'Category already exist, should be unique',
+          HttpStatus.BAD_REQUEST
+        );
+      }
+    }
+  }
   async delete(id: string) {
-    const x = await this.categoryModel.findByIdAndDelete(id, { new: true });
+    const x = await this.categoryModel.findByIdAndDelete(id);
     if (!x) {
       throw new Error(
         false,

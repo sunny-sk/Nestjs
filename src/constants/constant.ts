@@ -11,3 +11,15 @@ export const SCHEMA = {
   category: 'Category',
   task: 'Tasks',
 };
+
+export const LEVEL = {
+  BEGINNER: 'beginner',
+  INTERMEDIATE: 'intermediate',
+  MASTER: 'master',
+};
+export const TYPE = {
+  CODESNIPPETS: 'codeSnippets',
+  THEORY: 'theory',
+  OPTIONAL: 'iptional',
+  OUTPUTBASED: 'outputBased',
+};
