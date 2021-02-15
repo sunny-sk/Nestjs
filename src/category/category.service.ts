@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Error } from 'src/utils/Error';
 import { Category } from './category.model';
-import { CreateCategoryDto } from './dto/category.dto';
+import { CategoryDto } from './dto/category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -32,7 +32,7 @@ export class CategoryService {
     return cat;
   }
 
-  async create(category: CreateCategoryDto) {
+  async create(category: CategoryDto) {
     try {
       const newCategory = new this.categoryModel({ ...category });
       await newCategory.save();
@@ -67,7 +67,7 @@ export class CategoryService {
       message: 'deleted successfully',
     };
   }
-  async update(id: string, category: CreateCategoryDto) {
+  async update(id: string, category: CategoryDto) {
     const x = await this.categoryModel.findByIdAndUpdate(id, category, {
       new: true,
       runValidators: true,

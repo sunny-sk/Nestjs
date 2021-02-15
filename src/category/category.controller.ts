@@ -15,7 +15,7 @@ import { RolesGuard } from 'src/gaurd/role.gaurd';
 import { HttpExceptionFilter } from 'src/utils/Error';
 import { ParseObjectIdPipe } from '../pipe/ParseObjectIdPipe';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/category.dto';
+import { CategoryDto } from './dto/category.dto';
 @Controller()
 @UseFilters(HttpExceptionFilter)
 export class CategoryController {
@@ -26,7 +26,7 @@ export class CategoryController {
   }
   @Post('/admin/category')
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.INTERVIEWER]))
-  create(@Body() category: CreateCategoryDto) {
+  create(@Body() category: CategoryDto) {
     return this.categoryService.create(category);
   }
   @Delete('/admin/category/:id')
@@ -38,7 +38,7 @@ export class CategoryController {
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin]))
   update(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() category: CreateCategoryDto
+    @Body() category: CategoryDto
   ) {
     return this.categoryService.update(id, category);
   }
