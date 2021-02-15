@@ -1,21 +1,26 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CandidateFeedbackDto } from 'src/common/dto/feedback.dto';
+import { FeedbacksService } from 'src/feedbacks/feedbacks.service';
 import { Error } from 'src/utils/Error';
 import { TestDto } from './dto/test.dto';
 import { Test } from './tests.model';
 
 @Injectable()
 export class TestsService {
-  constructor(@InjectModel('Test') private readonly testModel: Model<Test>) {}
+  constructor(
+    @InjectModel('Test') private readonly testModel: Model<Test>,
+    private readonly feedbackService: FeedbacksService
+  ) {}
 
   //TODO:/ add filter here
   async getAll() {
     const x = await this.testModel
       .find({})
       .populate({
-        path: 'createdBy questions.questionId',
-        select: 'name email options',
+        path: 'createdBy questions.questionId feedback',
+        select: 'name email options title message suggestion',
       })
       .exec();
     return {
@@ -25,7 +30,7 @@ export class TestsService {
       tests: x,
     };
   }
-  async submitFeedback(id: string, feedback: string) {
+  async submitFeedback(id: string, feedback: CandidateFeedbackDto) {
     const test = await this.testModel.findById(id);
     if (!test) {
       throw new Error(
@@ -48,7 +53,9 @@ export class TestsService {
         HttpStatus.NOT_FOUND
       );
     }
-    test.feedback = feedback;
+
+    const { _id } = await this.feedbackService.addCandidateFeedback(feedback);
+    test.feedback = _id;
     test.isValid = false;
     await test.save();
     return {

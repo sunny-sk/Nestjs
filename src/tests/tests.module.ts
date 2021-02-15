@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from 'src/auth/auth.module';
 import { TestSchema } from './tests.model';
 import { TestController } from './tests.controller';
 import { TestsService } from './tests.service';
+import { FeedbacksModule } from 'src/feedbacks/feedbacks.module';
 
 @Module({
   imports: [
+    FeedbacksModule,
     MongooseModule.forFeature([{ name: 'Test', schema: TestSchema }]),
-    AuthModule,
   ],
   controllers: [TestController],
   providers: [TestsService],

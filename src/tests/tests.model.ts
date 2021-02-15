@@ -46,7 +46,7 @@ export const TestSchema = new Schema(
     },
     passingStatus: {
       type: String,
-      default: null,
+      default: PASSING_STATUS.NotEvaluated,
       enum: PASSING_STATUS,
     },
     questions: {
@@ -73,8 +73,8 @@ export const TestSchema = new Schema(
       default: null,
     },
     feedback: {
-      type: String,
-      default: null,
+      type: mongoose.Types.ObjectId,
+      ref: 'Feedback',
     },
     finishedAt: {
       type: Date,
@@ -105,5 +105,5 @@ export interface Test extends Document {
   isValid: boolean;
   passingStatus: PASSING_STATUS;
   passingPer: number;
-  feedback: string;
+  feedback: any;
 }

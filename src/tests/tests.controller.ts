@@ -20,6 +20,7 @@ import { ParseObjectIdPipe } from '../pipe/ParseObjectIdPipe';
 import { RolesGuard } from 'src/gaurd/role.gaurd';
 import { ROLE } from 'src/constants/constant';
 import { TestDto } from './dto/test.dto';
+import { CandidateFeedbackDto } from 'src/common/dto/feedback.dto';
 @Controller('tests')
 @ApiTags('tests')
 @UseFilters(HttpExceptionFilter)
@@ -39,7 +40,7 @@ export class TestController {
   @Post(':id/feedback')
   async submitFeedback(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body('feedback') feedback: string
+    @Body() feedback: CandidateFeedbackDto
   ) {
     return this.testService.submitFeedback(id, feedback);
   }
