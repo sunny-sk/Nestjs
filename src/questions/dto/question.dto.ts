@@ -15,7 +15,7 @@ export class CreateQuestionDto {
   @IsDefined()
   @IsString()
   @MinLength(10)
-  name: string;
+  question: string;
 
   @IsDefined()
   @IsEnum(TYPE, { each: true })
@@ -33,4 +33,15 @@ export class CreateQuestionDto {
   answer: string;
 
   options: any[];
+}
+
+export interface File {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetyoe: string;
+  path: string;
+  size: number;
+  filename: string;
+  destination: string;
 }
