@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TasksModule } from './tasks/tasks.module';
+import { TestModule } from './tests/tests.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { CategoryModule } from './category/category.module';
 import { RouterModule, Routes } from 'nest-router';
-import { QuestionsService } from './questions/questions.service';
-import { QuestionsController } from './questions/questions.controller';
 import { QuestionsModule } from './questions/questions.module';
+import { FeedbacksModule } from './feedbacks/feedbacks.module';
+import { InterviewsService } from './interviews/interviews.service';
+import { InterviewsModule } from './interviews/interviews.module';
 // const routes: Routes = [
 //   {
 //     path: '/admin/category',
@@ -29,14 +30,16 @@ import { QuestionsModule } from './questions/questions.module';
       useFindAndModify: true,
       useNewUrlParser: true,
     }),
-    TasksModule,
+    TestModule,
     UsersModule,
     AuthModule,
     CategoryModule,
     QuestionsModule,
+    FeedbacksModule,
+    InterviewsModule,
   ],
   controllers: [AppController],
   // controllers: [AuthController,AppController],
-  providers: [],
+  providers: [InterviewsService],
 })
 export class AppModule {}

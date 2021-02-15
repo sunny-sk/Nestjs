@@ -20,8 +20,16 @@ export class CategoryService {
     };
   }
 
-  findByID(id: string) {
-    return this.categoryModel.findById(id);
+  async findByID(id: string) {
+    const cat = await this.categoryModel.findById(id);
+    if (!cat) {
+      throw new Error(
+        false,
+        'category not found with this id',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+    return cat;
   }
 
   async create(category: CreateCategoryDto) {
