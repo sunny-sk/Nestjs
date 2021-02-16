@@ -7,14 +7,14 @@ export const TestSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      default: null,
-    },
     candidateEmail: {
       type: String,
       required: true,
       unique: true,
+    },
+    description: {
+      type: String,
+      default: null,
     },
     totalTime: {
       type: Number,
@@ -83,6 +83,11 @@ export const TestSchema = new Schema(
     createdBy: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
+      required: true,
+    },
+    password: {
+      type: String,
+      ref: 'User',
     },
   },
   { timestamps: true }
@@ -106,4 +111,5 @@ export interface Test extends Document {
   passingStatus: PASSING_STATUS;
   passingPer: number;
   feedback: any;
+  password: string;
 }

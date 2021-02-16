@@ -16,25 +16,26 @@ import { HttpExceptionFilter } from 'src/utils/Error';
 import { ParseObjectIdPipe } from '../pipe/ParseObjectIdPipe';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dto/category.dto';
-@Controller()
+@Controller('category')
 @UseFilters(HttpExceptionFilter)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
-  @Get('/category')
+  @Get('')
+  @UseGuards(AuthGuard('jwt'))
   getAll() {
     return this.categoryService.getAll();
   }
-  @Post('/admin/category')
+  @Post('')
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.INTERVIEWER]))
   create(@Body() category: CategoryDto) {
     return this.categoryService.create(category);
   }
-  @Delete('/admin/category/:id')
+  @Delete('/category/:id')
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin]))
   delete(@Param('id', ParseObjectIdPipe) id: string) {
     return this.categoryService.delete(id);
   }
-  @Put('/admin/category/:id')
+  @Put('category/:id')
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin]))
   update(
     @Param('id', ParseObjectIdPipe) id: string,

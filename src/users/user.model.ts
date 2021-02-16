@@ -8,9 +8,16 @@ export const userSchema = new Schema(
       maxlength: [32, 'max character 32'],
       trim: true,
     },
+    empId: {
+      type: String,
+      required: [true, 'Please add a empId'],
+      trim: true,
+      unique: true,
+    },
     email: {
       type: String,
       required: [true, 'Please add email'],
+      trim: true,
       unique: true,
       matcher: [
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -34,8 +41,8 @@ export const userSchema = new Schema(
     },
     roles: {
       type: [String],
-      enum: ['admin', 'user'],
-      default: ['user'],
+      enum: ROLE,
+      default: [ROLE.User],
     },
     resetPasswordToken: {
       type: String,
@@ -63,4 +70,5 @@ export interface User extends Document {
   salt: string;
   resetPasswordToken: string;
   emailVerifyToken: string;
+  empId: string;
 }

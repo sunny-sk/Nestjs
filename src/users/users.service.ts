@@ -124,6 +124,12 @@ export class UsersService {
         'Old password is not correct',
         HttpStatus.NON_AUTHORITATIVE_INFORMATION
       );
+    } else if (!user) {
+      throw new Error(
+        false,
+        'user not found with this id',
+        HttpStatus.NOT_FOUND
+      );
     }
     user.password = await this.hashPassword(creds.newPassword, user.salt);
     await user.save();
@@ -133,22 +139,39 @@ export class UsersService {
       message: 'Password changed successfully',
     };
   }
-  //TODO: complete it
   async deleteUser(id: string) {
     try {
-      await this.userModel.findByIdAndDelete(id);
+      const user = await this.userModel.findByIdAndDelete(id);
+      if (!user) {
+        throw new Error(
+          false,
+          'user not found with this id',
+          HttpStatus.NOT_FOUND
+        );
+      }
       return {
         success: true,
         code: 200,
         message: 'use deleted successfully',
       };
-    } catch (error) {}
+    } catch (error) {
+      //TODO: verify status here
+      throw new Error(false, error.message, error.status);
+    }
   }
 
   async findOne(data: any) {
-    return await this.userModel.findOne(data);
+    const user = await this.userModel.findOne(data);
+    if (!user) {
+      throw new Error(false, 'not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
   async findById(id: string) {
-    return await this.userModel.findById(id);
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new Error(false, 'not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 }

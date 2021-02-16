@@ -12,7 +12,11 @@ export const interviewSchema = new Schema(
       maxlength: [32, 'max character 32'],
       trim: true,
     },
-    email: {
+    candidateName: {
+      type: String,
+      trim: true,
+    },
+    candidateEmail: {
       type: String,
       matcher: [
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -62,7 +66,7 @@ export const interviewSchema = new Schema(
       default: INTERVIEW_STATUS.Goingon,
       enum: INTERVIEW_STATUS,
     },
-    creeatedBy: {
+    createdBy: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
     },

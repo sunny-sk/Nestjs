@@ -69,4 +69,6 @@ export interface Question extends Document {
   isActive: boolean;
   createdBy: mongoose.Types.ObjectId;
   category: mongoose.Types.ObjectId;
+  options: any;
+  answer: any;
 }
