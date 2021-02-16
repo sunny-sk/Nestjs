@@ -6,6 +6,7 @@ import {
   Header,
   Param,
   Post,
+  Put,
   Req,
   Res,
   UploadedFile,
@@ -39,7 +40,7 @@ export class QuestionsController {
     return this.questionService.getAll();
   }
 
-  @Post('')
+  @Post()
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.INTERVIEWER]))
   create(@Body() question: CreateQuestionDto, @Req() req) {
     return this.questionService.create(question, req.user);
@@ -48,6 +49,18 @@ export class QuestionsController {
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.INTERVIEWER]))
   delete(@Param('id', ParseObjectIdPipe) id: string) {
     return this.questionService.delete(id);
+  }
+
+  //TODO: add validation for updateQuestion
+
+  @Put(':id')
+  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.INTERVIEWER]))
+  update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updatedQuestion: any,
+    @Req() req
+  ) {
+    return this.questionService.update(id, updatedQuestion, req.user);
   }
 
   @Get('sample/:type/download')
@@ -72,3 +85,5 @@ export class QuestionsController {
     return this.questionService.uploadQuestions(type, file, req.user);
   }
 }
+
+//TODO: Create decorator for own By

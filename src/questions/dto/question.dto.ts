@@ -1,9 +1,7 @@
-import { Optional } from '@nestjs/common';
 import {
-  ArrayMinSize,
-  IsArray,
   IsDefined,
   IsEnum,
+  IsOptional,
   IsString,
   MinLength,
   Validate,
@@ -30,6 +28,7 @@ export class CreateQuestionDto {
   category: string;
 
   @IsString()
+  @IsOptional()
   answer: string;
 
   options: any[];
@@ -39,7 +38,7 @@ export interface File {
   fieldname: string;
   originalname: string;
   encoding: string;
-  mimetyoe: string;
+  mimetype: string;
   path: string;
   size: number;
   filename: string;

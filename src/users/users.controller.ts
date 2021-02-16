@@ -75,3 +75,6 @@ export class AdminController {
     return this.userService.assignRoleToUser(id, roles);
   }
 }
+
+//TODO: pipe for checking is not blocked
+// TODO : owner self gaurd

@@ -38,7 +38,6 @@ export class QuestionsService {
   async create(question: CreateQuestionDto, user: User) {
     const { category, options } = question;
     await this.categoryService.findByID(category);
-
     if (options && options.length < 4) {
       throw new Error(
         false,
@@ -204,7 +203,7 @@ export class QuestionsService {
           questions.push(
             new this.questionModel({
               question: row[0],
-              category: categories.find((e) => e.name == row[1])._id,
+              category: categories.find((e) => e.categoryName == row[1])._id,
               level: row[2],
               type: TYPE.OPTIONAL,
               options: [
