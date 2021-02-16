@@ -24,7 +24,15 @@ export class FeedbacksService {
     }
   }
 
-  updateFeedback() {
-    //
+  async updateFeedback(id: string) {
+    const feedback = await this.feedbackModel.findByIdAndUpdate(
+      id,
+      {},
+      { new: true, runValidators: true }
+    );
+    if (!feedback) {
+      //TODO throw error here
+    }
+    return feedback;
   }
 }
