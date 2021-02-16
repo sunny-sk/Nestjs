@@ -19,7 +19,7 @@ import { TestsService } from './tests.service';
 import { ParseObjectIdPipe } from '../pipe/ParseObjectIdPipe';
 import { RolesGuard } from 'src/gaurd/role.gaurd';
 import { ROLE } from 'src/constants/constant';
-import { TestDto } from './dto/test.dto';
+import { StartTestDto, TestDto } from './dto/test.dto';
 import { CandidateFeedbackDto } from 'src/common/dto/feedback.dto';
 @Controller('tests')
 @ApiTags('tests')
@@ -28,15 +28,14 @@ import { CandidateFeedbackDto } from 'src/common/dto/feedback.dto';
 export class TestController {
   constructor(private readonly testService: TestsService) {}
 
-  @Get(':id')
-  async getOne(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.testService.getOne(id);
+  @Post(':id/start')
+  async startTest(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() data: StartTestDto
+  ) {
+    return this.testService.startTest(id, data);
   }
 
-  @Post(':id/start')
-  async startTest(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.testService.startTest(id);
-  }
   @Post(':id/feedback')
   async submitFeedback(
     @Param('id', ParseObjectIdPipe) id: string,
@@ -44,6 +43,7 @@ export class TestController {
   ) {
     return this.testService.submitFeedback(id, feedback);
   }
+
   @Post(':testId/saveStatus')
   async saveStatus(
     @Param('testId', ParseObjectIdPipe) testId: string,
@@ -59,6 +59,13 @@ export class TestController {
   ) {
     return this.testService.finishTest(id, answers);
   }
+
+  @Get(':id')
+  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
+  async getOne(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.testService.getOne(id);
+  }
+
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
   async delete(@Param('id', ParseObjectIdPipe) id: string) {
@@ -83,9 +90,27 @@ export class TestController {
   async create(@Body() data: TestDto, @Req() req) {
     return this.testService.create(data, req.user);
   }
+
+  //TODO:  api for random test generate for single person
+  @Post()
+  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
+  async generateSingleRandomTest() {
+    //
+  }
+  //TODO: generatePDF and get it's link as well as download link
+  @Post()
+  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
+  async generateTestPdf() {
+    //
+  }
+
+  //TODO: reset test
+  @Post()
+  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
+  async resetTest() {
+    //
+  }
 }
 
-//TODO:  api for random test generate for single person
-//TODO: generatePDF and get it's link as well as download link
 //TODO: can't update test if is started
 //TODO: after submit calculate result

@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CandidateFeedbackDto } from 'src/common/dto/feedback.dto';
 import { FeedbacksService } from 'src/feedbacks/feedbacks.service';
 import { Error } from 'src/utils/Error';
-import { TestDto } from './dto/test.dto';
+import { StartTestDto, TestDto } from './dto/test.dto';
 import { Test } from './tests.model';
 
 @Injectable()
@@ -107,16 +107,19 @@ export class TestsService {
     const test = new this.testModel({
       ...data,
     });
+    //TODO: add function or generate random Password
+    test.password = data.candidateEmail;
     test.createdBy = user._id;
     try {
-      await test.save();
+      // await test.save();
       return test;
+      //TODO: send a test mail template a user with link and password
     } catch (error) {
       console.log(error);
     }
   }
 
-  async startTest(id: string) {
+  async startTest(id: string, data: StartTestDto) {
     const test = await this.testModel.findById(id);
     if (!test) {
       throw new Error(
@@ -124,6 +127,12 @@ export class TestsService {
         'test not found with this id',
         HttpStatus.NOT_FOUND
       );
+    } else if (
+      data.candidateEmail.trim() !== data.candidateEmail.trim() &&
+      data.password !== data.candidateEmail
+    ) {
+      //TODO: verify this condition
+      throw new Error(false, 'Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
     if (test.startedAt) {
       throw new Error(false, 'cannot start test again', HttpStatus.BAD_REQUEST);

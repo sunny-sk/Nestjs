@@ -87,7 +87,15 @@ export const TestSchema = new Schema(
     },
     password: {
       type: String,
-      ref: 'User',
+      default: null,
+    },
+    resetTestReason: {
+      type: String,
+      default: null,
+    },
+    resetCount: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }
@@ -112,4 +120,6 @@ export interface Test extends Document {
   passingPer: number;
   feedback: any;
   password: string;
+  resetTestReason: string;
+  resetCount: string;
 }
