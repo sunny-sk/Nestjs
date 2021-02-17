@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CandidateFeedbackDto } from 'src/common/dto/feedback.dto';
+import {
+  CandidateFeedbackDto,
+  UpdateFeedbackDto,
+} from 'src/common/dto/feedback.dto';
 import { Feedback } from './feedback.model';
-
+import { NOT_FOUND } from '../utils/ErrorResponse';
 @Injectable()
 export class FeedbacksService {
   constructor(
@@ -24,15 +27,16 @@ export class FeedbacksService {
     }
   }
 
-  //TODO: complete it
-  async updateFeedback(id: string) {
+  async updateFeedback(id: string, upFeedback: UpdateFeedbackDto) {
     const feedback = await this.feedbackModel.findByIdAndUpdate(
       id,
-      {},
+      {
+        ...upFeedback,
+      },
       { new: true, runValidators: true }
     );
     if (!feedback) {
-      //TODO throw error here
+      NOT_FOUND('feedback not found with this id');
     }
     return feedback;
   }

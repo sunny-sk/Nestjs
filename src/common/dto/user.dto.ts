@@ -2,6 +2,7 @@ import {
   IsArray,
   IsDefined,
   IsEmail,
+  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -16,11 +17,18 @@ export class CreateUserDto {
 
   @IsDefined()
   @IsString()
+  @MaxLength(32)
+  @MinLength(5)
+  empId: string;
+
+  @IsDefined()
+  @IsString()
   @MaxLength(10)
   @MinLength(5)
   password: string;
 
   @IsArray()
+  @IsOptional()
   skills: string[];
 
   @IsDefined()

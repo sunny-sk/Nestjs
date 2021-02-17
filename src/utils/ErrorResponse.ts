@@ -16,3 +16,10 @@ export const BAD_REQUEST = (message: string) => {
 export const ALREADY_EXIST = (message: string) => {
   throw new Error(false, message, HttpStatus.CONFLICT);
 };
+export const NOT_OWNED = (message: string) => {
+  throw new Error(false, message, HttpStatus.SERVICE_UNAVAILABLE);
+};
+
+export const NOT_AUTHORIZED = (message: string) => {
+  throw new Error(false, message, HttpStatus.UNAUTHORIZED);
+};

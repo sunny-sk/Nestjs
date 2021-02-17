@@ -20,7 +20,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/utils/Error';
 import { QuestionsService } from './questions.service';
-import { CreateQuestionDto } from './dto/question.dto';
+import { CreateQuestionDto, UpdateQuestionDto } from './dto/question.dto';
 import { ROLE } from 'src/constants/constant';
 import { RolesGuard } from 'src/gaurd/role.gaurd';
 import { ParseObjectIdPipe } from '../pipe/ParseObjectIdPipe';
@@ -29,7 +29,7 @@ import { multerOptions } from 'src/utils/FileUpload';
 @Controller('questions')
 @ApiTags('questions')
 @UseFilters(HttpExceptionFilter)
-@UsePipes(new ValidationPipe())
+@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class QuestionsController {
   constructor(private readonly questionService: QuestionsService) {}
 
@@ -38,6 +38,11 @@ export class QuestionsController {
   getAll() {
     //TODO:// add filter and pagination here
     return this.questionService.getAll();
+  }
+  @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
+  getOne(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.questionService.getOne(id);
   }
 
   @Post()
@@ -57,7 +62,7 @@ export class QuestionsController {
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.INTERVIEWER]))
   update(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() updatedQuestion: any,
+    @Body() updatedQuestion: UpdateQuestionDto,
     @Req() req
   ) {
     return this.questionService.update(id, updatedQuestion, req.user);
@@ -86,4 +91,27 @@ export class QuestionsController {
   }
 }
 
-//TODO: Create decorator for own By
+/**
+ * create question
+ *     * admin
+ *     * interviwer
+ * get all question
+ *     * pagination
+ *     * filter
+ * get all queestions by id  =  done
+ *     * all except user
+ * update question
+ *     * update by created person and admin only
+ * delete question
+ *     * admin only
+ * approve questions
+ *     * admin  - in one click
+ *     * interviewer - atleast three approvel  // not sure about this featue
+ * download question sample
+ *     * optional sample
+ *     * others type sample
+ * upload question using file
+ *     * optional sample
+ *     * others type sample
+ *
+ */

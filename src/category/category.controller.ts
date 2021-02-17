@@ -8,6 +8,8 @@ import {
   Put,
   UseFilters,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ROLE } from 'src/constants/constant';
@@ -18,6 +20,7 @@ import { CategoryService } from './category.service';
 import { CategoryDto } from './dto/category.dto';
 @Controller('category')
 @UseFilters(HttpExceptionFilter)
+@UsePipes(new ValidationPipe())
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
   @Get('')

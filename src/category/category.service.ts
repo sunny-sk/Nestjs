@@ -26,7 +26,7 @@ export class CategoryService {
       throw new Error(
         false,
         'category not found with this id',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.NOT_FOUND
       );
     }
     return cat;
