@@ -20,14 +20,14 @@ export class EmailService {
     });
   }
 
-  sendMail = (to: string, subject: string) => {
+  sendMail = (to: string, subject: string, body: string | null) => {
     this.transporter
       .sendMail({
         from: 'public-auth@outlook.com',
         to: to,
         subject: subject,
-        html: '<h1>Hello world</h1>',
+        html: body ? body : '<h1>Hello world</h1>',
       })
-      .then(console.log);
+      .then(() => {});
   };
 }
