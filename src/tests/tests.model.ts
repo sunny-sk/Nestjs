@@ -3,6 +3,10 @@ import * as mongoose from 'mongoose';
 import { PASSING_PERCENTAGE, PASSING_STATUS } from '../constants/constant';
 export const TestSchema = new Schema(
   {
+    forPosition: {
+      type: String,
+      default: null,
+    },
     candidateName: {
       type: String,
       required: true,
@@ -10,7 +14,6 @@ export const TestSchema = new Schema(
     candidateEmail: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
@@ -122,4 +125,5 @@ export interface Test extends Document {
   password: string;
   resetTestReason: string;
   resetCount: string;
+  forPosition: string;
 }

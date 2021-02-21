@@ -24,53 +24,18 @@ import { CandidateFeedbackDto } from 'src/common/dto/feedback.dto';
 @Controller('tests')
 @ApiTags('tests')
 @UseFilters(HttpExceptionFilter)
-@UsePipes(new ValidationPipe())
+@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class TestController {
   constructor(private readonly testService: TestsService) {}
 
-  @Post(':id/start')
-  async startTest(
+  @Get(':id')
+  async getTest(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() data: StartTestDto
   ) {
-    return this.testService.startTest(id, data);
+    return this.testService.getTest(id, data);
   }
 
-  @Post(':id/feedback')
-  async submitFeedback(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() feedback: CandidateFeedbackDto
-  ) {
-    return this.testService.submitFeedback(id, feedback);
-  }
-
-  @Post(':testId/saveStatus')
-  async saveStatus(
-    @Param('testId', ParseObjectIdPipe) testId: string,
-    @Body('answer') answer: string,
-    @Body('questionId', ParseObjectIdPipe) questionId: string
-  ) {
-    return this.testService.saveStatus(testId, questionId, answer);
-  }
-  @Post(':id/finish')
-  async finishTest(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body('answers') answers: any
-  ) {
-    return this.testService.finishTest(id, answers);
-  }
-
-  @Get(':id')
-  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
-  async getOne(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.testService.getOne(id);
-  }
-
-  @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
-  async delete(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.testService.delete(id);
-  }
   @Get(':id/view')
   @UseGuards(
     AuthGuard('jwt'),
@@ -85,6 +50,49 @@ export class TestController {
   async getAll() {
     return this.testService.getAll();
   }
+
+  @Post(':id/start')
+  async startTest(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() data: StartTestDto
+  ) {
+    return this.testService.startTest(id, data);
+  }
+
+  @Post(':id/feedback/:password')
+  async submitFeedback(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('password') password: string,
+    @Body() feedback: CandidateFeedbackDto
+  ) {
+    return this.testService.submitFeedback(id, password, feedback);
+  }
+
+  @Post(':testId/saveStatus/:password')
+  async saveStatus(
+    @Param('testId', ParseObjectIdPipe) testId: string,
+    @Param('password') password: string,
+    @Body('answer') answer: string,
+    @Body('questionId', ParseObjectIdPipe) questionId: string
+  ) {
+    return this.testService.saveStatus(testId, questionId, password, answer);
+  }
+
+  @Post(':id/finish/:password')
+  async finishTest(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('password') password: string,
+    @Body('answers') answers: any
+  ) {
+    return this.testService.finishTest(id, password, answers);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
+  async delete(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.testService.delete(id);
+  }
+
   @Post()
   @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin, ROLE.TALENTAQ]))
   async create(@Body() data: TestDto, @Req() req) {

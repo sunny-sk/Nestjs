@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CandidateFeedbackDto {
   @IsString()
@@ -8,6 +8,10 @@ export class CandidateFeedbackDto {
   @IsString()
   @MinLength(5)
   message: string;
+
+  @IsString()
+  @IsOptional()
+  suggestion: string;
 }
 export class UpdateFeedbackDto {
   @IsString()

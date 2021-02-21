@@ -66,12 +66,19 @@ export class AuthService {
 
   async signupUser(newUser: CreateUserDto) {
     const check = await this.userService.findOne({
-      email: newUser.email,
+      $or: [{ email: newUser.email }, { empId: newUser.empId }],
     });
 
     if (check) {
-      throw new Error(false, 'email already exist', HttpStatus.BAD_REQUEST);
+      throw new Error(
+        false,
+        check.email == newUser.email
+          ? 'email already exist'
+          : 'empid already exist',
+        HttpStatus.BAD_REQUEST
+      );
     }
+
     const user = await this.userService.addUSer(newUser);
 
     return {

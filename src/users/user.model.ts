@@ -68,6 +68,7 @@ export interface User extends Document {
   emailVerified: true;
   roles: string[];
   salt: string;
+  skills: string[];
   resetPasswordToken: string;
   emailVerifyToken: string;
   empId: string;

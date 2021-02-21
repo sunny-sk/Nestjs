@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
 import * as helmet from 'helmet';
+import * as mongoose from 'mongoose';
 async function bootstrap() {
   const logger = new Logger('bootstarp');
   const config = new DocumentBuilder()
@@ -20,7 +21,11 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
-
+  mongoose.set('useNewUrlParser', true);
+  mongoose.set('useFindAndModify', true);
+  mongoose.set('useCreateIndex', true);
+  mongoose.set('useUnifiedTopology', true);
+  mongoose.set('useCreateIndex', true);
   app.use(helmet());
   app.enableCors();
   const PORT = 3001;

@@ -3,17 +3,16 @@ export const feedbackSchema = new Schema(
   {
     title: {
       type: String,
-      required: [true, 'Please add a full name'],
+      required: [true, 'Please add a title'],
       trim: true,
     },
     message: {
       type: String,
-      required: [true, 'Please add a full name'],
+      required: [true, 'Please add a message'],
       trim: true,
     },
     suggestion: {
       type: String,
-      required: [true, 'Please add a full name'],
       trim: true,
     },
   },

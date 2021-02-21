@@ -23,7 +23,17 @@ export class FeedbacksService {
       await newFeedback.save();
       return newFeedback;
     } catch (error) {
-      // throw error here
+      console.log(error);
+    }
+  }
+
+  async addInterviewerFeedBack(feedback: CandidateFeedbackDto) {
+    const newFeedback = new this.feedbackModel(feedback);
+    try {
+      await newFeedback.save();
+      return newFeedback;
+    } catch (error) {
+      console.log(error);
     }
   }
 

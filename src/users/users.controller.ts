@@ -28,13 +28,9 @@ import { ParseObjectIdPipe } from '../pipe/ParseObjectIdPipe';
 @Controller('users')
 @UseFilters(HttpExceptionFilter)
 @UseGuards(AuthGuard('jwt'))
+@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
-
-  @Get('getAll')
-  getAllUsers() {
-    return this.userService.getAllUsers();
-  }
 
   @Delete('delete/:id')
   deleteUser(@Param('id', ParseObjectIdPipe) id: string) {
@@ -46,7 +42,7 @@ export class UsersController {
     @Body() updateUserData: UpdateUserDto,
     @Req() req
   ) {
-    this.userService.updateProfile(id, updateUserData, req.user);
+    return this.userService.updateProfile(id, updateUserData, req.user);
   }
   @Put('update/password')
   updatePassword(@Body() credes: PasswordUpdateDto, @Req() req) {
@@ -56,9 +52,21 @@ export class UsersController {
 @ApiTags('admin')
 @Controller('admin')
 @UseFilters(HttpExceptionFilter)
+@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 @UseGuards(AuthGuard('jwt'), new RolesGuard([ROLE.Admin]))
 export class AdminController {
   constructor(private readonly userService: UsersService) {}
+
+  @Get('users/:id')
+  getUser(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.userService.getUser(id);
+  }
+
+  @Get('users')
+  getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+
   @Put('blockuser/:id')
   async blockUser(
     @Param('id', ParseObjectIdPipe) id: string,

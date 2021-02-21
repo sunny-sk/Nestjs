@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { Error } from 'src/utils/Error';
 import { Category } from './category.model';
 import { CategoryDto } from './dto/category.dto';
-
+import { NOT_FOUND } from '../utils/ErrorResponse';
 @Injectable()
 export class CategoryService {
   constructor(
@@ -23,11 +23,7 @@ export class CategoryService {
   async findByID(id: string) {
     const cat = await this.categoryModel.findById(id);
     if (!cat) {
-      throw new Error(
-        false,
-        'category not found with this id',
-        HttpStatus.NOT_FOUND
-      );
+      NOT_FOUND('category not found with this id');
     }
     return cat;
   }
@@ -42,7 +38,6 @@ export class CategoryService {
         category: newCategory,
       };
     } catch (error) {
-      console.log(error);
       if (error.code == 11000) {
         throw new Error(
           false,
@@ -55,11 +50,7 @@ export class CategoryService {
   async delete(id: string) {
     const x = await this.categoryModel.findByIdAndDelete(id);
     if (!x) {
-      throw new Error(
-        false,
-        'Category not found with this id',
-        HttpStatus.NOT_FOUND
-      );
+      NOT_FOUND('category not found with this id');
     }
     return {
       success: true,
@@ -73,11 +64,7 @@ export class CategoryService {
       runValidators: true,
     });
     if (!x) {
-      throw new Error(
-        false,
-        'Category not found with this id',
-        HttpStatus.NOT_FOUND
-      );
+      NOT_FOUND('category not found with this id');
     }
     return {
       success: true,
